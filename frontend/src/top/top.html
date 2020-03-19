@@ -1,0 +1,64 @@
+<div>
+  <div class="top-bar">
+    <p>{{year}}年{{month}}月</p>
+    <b-button v-b-modal.add-reservation-modal>追加</b-button>
+    <b-modal id="add-reservation-modal">
+      <div>test</div>
+    </b-modal>
+    <div class="dw">
+      <p v-for="item in dwlist">
+        {{item}}
+      </p>
+    </div>
+    <div class="day-panel-list">
+      <p class="day-panel" v-for="item in daylist">
+        {{item}}
+      </p>
+    </div>
+    <b-button @click="lastweek">←</b-button>
+    <b-button @click="nextWeek">→</b-button>
+
+  </div>
+  <div class="main">
+    <div class="time-panel-list">
+      <p class="time-panel" v-for="item in timelist">{{item}}</p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day1_10"></p>
+      <p class="day1-panel" v-text="day1_11"></p>
+      <p class="day1-panel" v-text="day1_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day2_10"></p>
+      <p class="day1-panel" v-text="day2_11"></p>
+      <p class="day1-panel" v-text="day2_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day3_10"></p>
+      <p class="day1-panel" v-text="day3_11"></p>
+      <p class="day1-panel" v-text="day3_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day4_10"></p>
+      <p class="day1-panel" v-text="day4_11"></p>
+      <p class="day1-panel" v-text="day4_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day5_10"></p>
+      <p class="day1-panel" v-text="day5_11"></p>
+      <p class="day1-panel" v-text="day5_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day6_10"></p>
+      <p class="day1-panel" v-text="day6_11"></p>
+      <p class="day1-panel" v-text="day6_12"></p>
+    </div>
+    <div class="day1">
+      <p class="day1-panel" v-text="day7_10"></p>
+      <p class="day1-panel" v-text="day7_11"></p>
+      <p class="day1-panel" v-text="day7_12"></p>
+    </div>
+
+
+  </div>
+</div>

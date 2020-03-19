@@ -1,0 +1,227 @@
+swagger: '2.0'
+info:
+  description: リザーブのAPI定義書
+  version: 0.0.1
+  title: Swagger Reserveroom
+  termsOfService: ''
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: reserveroom.com
+basePath: /api/v1
+tags:
+  - name: reservation
+    description: 予約情報
+schemes:
+  - https
+paths:
+  /reservations:
+    get:
+      tags:
+        - reservation
+      summary: 全ての予約情報の取得
+      description: ''
+      operationId: getReservation
+      parameters:
+        - in: header
+          name: Authorization
+          description: >-
+            Cognito
+            フェデレーテッドアイデンティティから受け取った「アクセスキーID」「セキュリティキー」「セッショントークン」をもとに作成した署名
+          required: true
+          type: string
+      responses:
+        '200':
+          description: 成功
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                reserveId:
+                  type: string
+                reserve_room:
+                  type: string
+                  description: '1: 大会議室, 2: 小会議室'
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+                create_email:
+                  type: string
+                update_email:
+                  type: string
+                  description: 更新者のメールアドレス
+                description:
+                  type: string
+        '400':
+          description: 失敗
+        '500':
+          description: サーバーエラー
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    post:
+      tags:
+        - reservation
+      summary: 予約情報の追加
+      description: ''
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: postReservations
+      parameters:
+        - in: header
+          name: Authorization
+          description: >-
+            Cognito
+            フェデレーテッドアイデンティティから受け取った「アクセスキーID」「セキュリティキー」「セッショントークン」をもとに作成した署名
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: DBに登録する予約の日程と内容
+          required: true
+          schema:
+            type: object
+            properties:
+              reserve_room:
+                type: string
+                description: '1: 大会議室, 2: 小会議室'
+              create_email:
+                type: string
+              start_time:
+                format: date-time
+                type: string
+              end_time:
+                type: string
+                format: date-time
+              description:
+                type: string
+      responses:
+        '200':
+          description: 成功
+          schema:
+            type: object
+            properties:
+              reserveId:
+                type: string
+              reserve_room:
+                type: string
+                description: '1: 大会議室, 2: 小会議室'
+              create_email:
+                type: string
+              start_time:
+                format: date-time
+                type: string
+              end_time:
+                type: string
+                format: date-time
+              description:
+                type: string
+        '400':
+          description: 失敗
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request.
+        '500':
+          description: サーバーエラー
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal server error.
+  '/reservations/{reserveId}':
+    patch:
+      tags:
+        - reservation
+      summary: 予約情報を変更する
+      description: ''
+      operationId: patchReservations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          description: >-
+            Cognito
+            フェデレーテッドアイデンティティから受け取った「アクセスキーID」「セキュリティキー」「セッショントークン」をもとに作成した署名
+          required: true
+          type: string
+        - in: path
+          name: reserveId
+          type: string
+          required: true
+        - in: body
+          name: body
+          description: DBに登録する予約の日程と内容の変更
+          required: true
+          schema:
+            type: object
+            properties:
+              reserveId:
+                type: string
+              reserve_room:
+                type: string
+                description: '1: 大会議室, 2: 小会議室'
+              editFlag:
+                type: string
+                description: '1: 更新, 2: 削除'
+              start_time:
+                type: string
+                format: date-time
+              end_time:
+                type: string
+                format: date-time
+              update_email:
+                type: string
+              description:
+                type: string
+      responses:
+        '200':
+          description: 'editFlagが1,2の時どちらも同じものを返す'
+          schema:
+            type: object
+            properties:
+              reserveId:
+                type: string
+              reserve_room:
+                type: string
+                description: '1: 大会議室, 2: 小会議室'
+              start_time:
+                type: string
+                format: date-time
+              end_time:
+                type: string
+                format: date-time
+              update_email:
+                type: string
+              description:
+                type: string
+        '400':
+          description: 失敗
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request.
+        '500':
+          description: サーバーエラー
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Internal server error.

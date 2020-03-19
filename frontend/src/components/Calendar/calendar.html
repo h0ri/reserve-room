@@ -1,0 +1,128 @@
+<div>
+  <b-navbar class="nb" type="dark" variant="faded">
+    <b-navbar-brand>
+      会議室予約app
+    </b-navbar-brand>
+  </b-navbar>
+  <div class="bg-wrapper flexbox center">
+    <!-- <div v-if="loading">
+      <bounce-loader :color="'#1E4573'" :size="'100px'"></bounce-loader>
+    </div> -->
+    <b-container class="bg">
+      <h3>
+        本日：{{ `${new Date().getFullYear()}年 ${new Date().getMonth()+1}月 ${new Date().getDate()}日` }}
+      </h3>
+      <full-calendar :config="config"
+                     :events="events"
+                     @event-selected="eventSelected"
+                     @event-created="eventCreated"
+                     @event-drop="eventDrop"
+                     @event-resize="eventResize"/>
+
+      <b-modal v-model="isModal"
+               :title="modal.title"
+               class="text-left">
+        <div class="m-body">
+          <!-- reserve -->
+          <div v-if="modal.type==='1'">
+            <div>
+              <b>予約時間</b>
+              <p>{{modal.data.start.format('YYYY/MM/DD HH:mm')}} ~ {{modal.data.end.format('YYYY/MM/DD HH:mm')}}</p>
+            </div>
+            <div class="mb-3">
+              <b-form-input v-model="new_event.title"
+                            class="option"
+                            type="text"
+                            placeholder="タイトル"></b-form-input>
+            </div>
+            <div class="mb-3">
+              <b-form-select v-model="new_event.company"
+                             class="option"
+                             type="text"
+                             :options="company"></b-form-select>
+            </div>
+            <div class="mb-3">
+              <b-form-input v-model="new_event.name"
+                            class="option"
+                            type="text"
+                            placeholder="名前"></b-form-input>
+            </div>
+            <div>
+              <b-form-select v-model="new_event.priority"
+                             class="option"
+                             type="text"
+                             :options="priority"></b-form-select>
+            </div>
+          </div>
+          <!-- reserve end -->
+          <!-- update -->
+          <div v-if="modal.type==='2'">
+            <div>
+              <b>予約時間</b>
+              <p>{{modal.data.start.format('YYYY/MM/DD HH:mm')}} ~ {{modal.data.end.format('YYYY/MM/DD HH:mm')}}</p>
+            </div>
+            <div class="mb-3">
+              <b-form-input v-model="modal.data.title"
+                            class="option"
+                            type="text"
+                            placeholder="タイトル"></b-form-input>
+            </div>
+            <div class="mb-3">
+              <b-form-select v-model="modal.data.company"
+                             class="option"
+                             type="text"
+                             :options="company"></b-form-select>
+            </div>
+            <div class="mb-3">
+              <b-form-input v-model="modal.data.name"
+                            class="option"
+                            type="text"
+                            placeholder="名前"></b-form-input>
+            </div>
+            <div>
+              <b-form-select v-model="modal.data.priority"
+                             class="option"
+                             type="text"
+                             :options="priority"></b-form-select>
+            </div>
+          </div>
+          <!-- update end -->
+          <!-- remove -->
+          <div v-if="modal.type==='3'">
+            <div>
+              <b>予約時間</b>
+              <p>{{modal.data.start.format('YYYY/MM/DD HH:mm')}} ~ {{modal.data.end.format('YYYY/MM/DD HH:mm')}}</p>
+            </div>
+            <div class="mb-3">
+              <b>タイトル</b>
+              <p>{{modal.data.title}}</p>
+            </div>
+            <div class="mb-3">
+              <b>予約者</b>
+              <p>{{modal.data.company}} {{modal.data.name}}</p>
+            </div>
+            <div class="mb-3">
+              <b>重要度</b>
+              <p>{{modal.data.priority}}</p>
+            </div>
+          </div>
+          <!-- remove end -->
+        </div>
+        <div slot="modal-footer" class="w-100 text-center">
+          <b-btn size="sm" class="mr-3 m-btn" variant="secondary" @click="isModal=false" :disabled="updating">
+            キャンセル
+          </b-btn>
+          <b-btn size="sm" class="m-btn m-alert" variant="primary" @click="setEvent" v-if="modal.type==='1'" :disabled="!new_event.company || !new_event.title || !new_event.name || !new_event.priority || updating">
+            予約する
+          </b-btn>
+          <b-btn size="sm" class="m-btn m-alert" variant="warning" @click="updateEvent" v-if="modal.type==='2'" :disabled="updating">
+            更新する
+          </b-btn>
+          <b-btn size="sm" class="m-btn m-alert" variant="danger" @click="removeEvent" v-if="modal.type==='3'" :disabled="updating">
+            削除する
+          </b-btn>
+        </div>
+      </b-modal>
+    </b-container>
+  </div>
+</div>

@@ -1,0 +1,3 @@
+<template src="./calendar.html"></template>
+<script src="./calendar.js"></script>
+<style src="./calendar.css" scoped></style>
